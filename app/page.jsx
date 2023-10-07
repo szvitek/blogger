@@ -10,12 +10,14 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [error, setError] = useState(null);
+  const { setPosts: postContextFunc } = useContext(PostContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get('/api/posts');
         setPosts(data);
+        postContextFunc(data);
       } catch (error) {
         setError('Error fetching posts');
       }

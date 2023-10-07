@@ -10,11 +10,15 @@ export const connectToDB = async () => {
     return;
   }
 
-  const db = await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-  isConnected = true;
-  console.log("using new DB connection")
+    isConnected = true;
+    console.log('using new DB connection');
+  } catch (error) {
+    console.log(error);
+  }
 };
