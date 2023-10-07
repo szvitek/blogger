@@ -7,29 +7,7 @@ import axios from 'axios';
 import Tag from '@/components/cards/Tag';
 
 export default function Home() {
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: 'How to use React',
-      subheading: 'React is a great framework',
-      image: 'https://picsum.photos/200/300',
-      tag: 'React',
-    },
-    {
-      id: 2,
-      title: 'How to use React2',
-      subheading: 'React is a great framework',
-      image: 'https://picsum.photos/200/300',
-      tag: 'React',
-    },
-    {
-      id: 3,
-      title: 'How to use React3',
-      subheading: 'React is a great framework',
-      image: 'https://picsum.photos/200/300',
-      tag: 'React',
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [error, setError] = useState(null);
 
@@ -42,6 +20,8 @@ export default function Home() {
         setError('Error fetching posts');
       }
     };
+
+    fetchData();
   }, []);
 
   if (posts?.length === 0) {
@@ -51,7 +31,11 @@ export default function Home() {
   if (error) {
     return (
       <div className="text-center text-3xl mt-10">
-        <img src="#" alt="error" className="w-96" />
+        <img
+          src="https://images.unsplash.com/photo-1623018035782-b269248df916?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+          alt="error"
+          className="w-96 h-96 object-cover"
+        />
       </div>
     );
   }
@@ -92,17 +76,17 @@ export default function Home() {
                 tag={post.tag}
                 title={post.title}
                 desc={post.subheading}
-                image={post.image}
+                image={post.img}
               />
             ))}
         {selectedTags?.length === 0 &&
           posts.map((post) => (
             <BlogCard
-              key={post.id}
+              key={post._id}
               tag={post.tag}
               title={post.title}
               desc={post.subheading}
-              image={post.image}
+              image={post.img}
             />
           ))}
       </div>
