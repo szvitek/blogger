@@ -1,10 +1,12 @@
 'use client';
 
+import { usePostContext } from '@/context/PostContext';
 import Link from 'next/link';
 import { useState } from 'react';
 
-const Nav = ({ posts }) => {
+const Nav = () => {
   const [filter, setFilter] = useState('');
+  const { posts } = usePostContext();
 
   const handlePostClick = () => {
     setFilter('');

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const BlogCard = ({ tag, title, image, desc, id }) => {
@@ -5,9 +6,12 @@ const BlogCard = ({ tag, title, image, desc, id }) => {
     <div>
       <Link href={`/post/${id}`}>
         <div className="rounded-lg objext-cover">
-          <img
+          <Image
             src={image}
             alt={title}
+            height={0}
+            width={0}
+            sizes='100%'
             className="rounded-t-lg object-cover h-40 w-full"
           />
           <div className="p-4">

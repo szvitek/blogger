@@ -1,30 +1,24 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import BlogCard from '@/components/cards/BlogCard';
-import { useState, useEffect, useContext } from 'react';
-import PostContext from '../context/PostContext';
-import axios from 'axios';
 import Tag from '@/components/cards/Tag';
+import { usePostContext } from '@/context/PostContext';
+import Image from 'next/image';
 
 export default function Home() {
-  const [posts, setPosts] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [error, setError] = useState(null);
-  const { setPosts: postContextFunc } = useContext(PostContext);
+  const { posts, error, selectedTags, setSelectedTags } = usePostContext();
+  const [postsByTags, setPostsByTags] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get('/api/posts');
-        setPosts(data);
-        postContextFunc(data);
-      } catch (error) {
-        setError('Error fetching posts');
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (selectedTags?.length !== 0 && posts) {
+      setPostsByTags(posts.filter((post) => selectedTags.includes(post.tag)));
+    } else if (selectedTags?.length === 0 && posts) {
+      setPostsByTags(posts);
+    } else {
+      setPostsByTags([]);
+    }
+  }, [selectedTags, posts]);
 
   if (posts?.length === 0) {
     return <div className="text-center">No posts found...</div>;
@@ -33,10 +27,12 @@ export default function Home() {
   if (error) {
     return (
       <div className="text-center text-3xl mt-10">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1623018035782-b269248df916?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
           alt="error"
-          className="w-96 h-96 object-cover"
+          width={384}
+          height={384}
+          className="object-cover object-center mx-auto"
         />
       </div>
     );
@@ -69,28 +65,16 @@ export default function Home() {
         )}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-10">
-        {selectedTags?.length !== 0 &&
-          posts
-            ?.filter((post) => selectedTags.includes(post.tag))
-            .map((post) => (
-              <BlogCard
-                key={post.id}
-                tag={post.tag}
-                title={post.title}
-                desc={post.subheading}
-                image={post.img}
-              />
-            ))}
-        {selectedTags?.length === 0 &&
-          posts.map((post) => (
-            <BlogCard
-              key={post._id}
-              tag={post.tag}
-              title={post.title}
-              desc={post.subheading}
-              image={post.img}
-            />
-          ))}
+        {postsByTags.map((post) => (
+          <BlogCard
+            id={post.number}
+            key={post._id}
+            tag={post.tag}
+            title={post.title}
+            desc={post.subheading}
+            image={post.img}
+          />
+        ))}
       </div>
     </main>
   );

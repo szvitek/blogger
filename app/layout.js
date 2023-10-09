@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import PostContext from '@/context/PostContext';
+import { PostProvider } from '@/context/PostContext';
 import Nav from '@/components/Nav';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -14,15 +13,14 @@ const inter = Inter({ subsets: ['latin'] });
 // };
 
 export default function RootLayout({ children }) {
-  const [posts, setPosts] = useState([]);
   return (
     <html lang="en">
-      <PostContext.Provider value={{ posts, setPosts }}>
+      <PostProvider>
         <body className={inter.className}>
-          <Nav posts={posts} />
+          <Nav />
           {children}
         </body>
-      </PostContext.Provider>
+      </PostProvider>
     </html>
   );
 }
